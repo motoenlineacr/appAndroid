@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "odoo19.3",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}\\odoo\\odoo-bin",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "-c", "${workspaceFolder}\\odoo\\o19.conf",
+                "-d", "motyx",
+                "--update", "bac_payment"
+            ],
+            
+            "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe"
+        }
+    ]
+}

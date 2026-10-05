@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_client" model="ir.actions.client">
+        <field name="name">Reporte Productos Vendidos</field>
+        <field name="tag">dev_refatodo.report_action</field>
+    </record>
+
+    <menuitem id="menu_reportes_root"
+        name="Reportes"
+        sequence="10"
+        web_icon="dev_refatodo,static/description/icon.png"
+    />
+
+    <menuitem id="menu_productos_vendidos"
+        name="Productos Vendidos"
+        parent="dev_refatodo.menu_reportes_root"
+        action="dev_refatodo.action_report_client"
+        sequence="20" />
+
+</odoo>

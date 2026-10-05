@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="agent_ia_res_config_settings" model="ir.ui.view">
+        <field name="name">IA</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="AI" name="agent_ia" data-string="AI">
+                    <block title="AI">
+                        <setting>
+                            <field name="agent_ia_api_key" hel="Apy key para la AI" />
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="agent_ia_action" model="ir.actions.client">
+        <field name="name">IA</field>
+        <field name="tag">agent_ia.action_agent</field>
+    </record>
+
+
+    <menuitem
+        id="agent_ia_menu_root"
+        name="AI"
+        action="agent_ia_action"
+        web_icon="agent_ia,static/description/icon.png"
+    />
+
+</odoo>

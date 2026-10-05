@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="dev_refatodo.Report" owl="1">
+        <div class="o_action_manager p-4 bg-light" style="height: 100%; overflow: auto;">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="mb-0"><i class="fa fa-shopping-basket me-2"/>Ranking de Ventas</h3>
+                        <span class="badge rounded-pill bg-light text-primary fw-bold px-3 py-2">
+                            <t t-esc="state.count"/> Productos encontrados
+                        </span>
+                    </div>
+                    
+                    <div class="d-flex gap-3 bg-white p-2 rounded shadow-sm text-dark flex-wrap align-items-center">
+                        <div class="input-group input-group-sm" style="width: 250px;">
+                            <span class="input-group-text bg-transparent border-end-0">
+                                <i class="fa fa-search text-muted"/>
+                            </span>
+                            <input type="text" class="form-control border-start-0 shadow-none" 
+                                   placeholder="Buscar producto..." 
+                                   t-model="state.searchQuery" 
+                                   t-on-input="updateDisplay"/>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-1 border-start ps-3">
+                            <label class="small fw-bold mb-0 text-muted">Desde:</label>
+                            <input type="date" class="form-control form-control-sm border-0 shadow-none text-primary" 
+                                   t-model="state.filterFrom" t-on-change="updateDisplay"/>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-1">
+                            <label class="small fw-bold mb-0 text-muted">Hasta:</label>
+                            <input type="date" class="form-control form-control-sm border-0 shadow-none text-primary" 
+                                   t-model="state.filterTo" t-on-change="updateDisplay"/>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-1 border-start ps-3 position-relative">
+                            <label class="small fw-bold mb-0 text-muted">Categoría:</label>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-primary dropdown-toggle border-0 fw-bold shadow-none" 
+                                        type="button" 
+                                        t-on-click="() => state.isCategoryMenuOpen = !state.isCategoryMenuOpen">
+                                    <t t-esc="state.selectedCategory.name"/>
+                                </button>
+                                <div t-if="state.isCategoryMenuOpen" 
+                                     class="dropdown-menu show shadow-lg border-0 p-2" 
+                                     style="position: absolute; min-width: 250px; max-height: 350px; overflow-y: auto; z-index: 1050; top: 100%; left: 0;">
+                                    <div class="p-1 mb-2 sticky-top bg-white">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-light border-end-0"><i class="fa fa-filter text-muted"/></span>
+                                            <input type="text" 
+                                                   class="form-control border-start-0 shadow-none" 
+                                                   placeholder="Filtrar categorías..."
+                                                   t-model="state.categorySearch"
+                                                   t-on-click.stop=""
+                                                   autoFocus="true"/>
+                                        </div>
+                                    </div>
+                                    <button class="dropdown-item d-flex align-items-center py-2 rounded" 
+                                            t-on-click="() => selectCategory({id: 'all', name: 'Todas'})">
+                                        <i class="fa fa-globe me-2 text-primary"/> Todas las categorías
+                                    </button>
+                                    <div class="dropdown-divider"></div>
+                                    <t t-foreach="filteredCategories" t-as="cat" t-key="cat.id">
+                                        <button class="dropdown-item py-2 rounded" 
+                                                t-on-click="() => selectCategory(cat)">
+                                            <t t-esc="cat.name"/>
+                                        </button>
+                                    </t>
+                                    <div t-if="filteredCategories.length == 0" class="p-3 small text-muted text-center italic">
+                                        <i class="fa fa-exclamation-circle d-block mb-1"/> No se encontraron categorías
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <t t-if="state.loading">
+                        <div class="text-center p-5">
+                            <i class="fa fa-circle-o-notch fa-spin fa-3x text-primary mb-3"/>
+                            <p class="text-muted">Analizando ventas...</p>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light border-bottom">
+                                    <tr>
+                                        <th class="ps-4" style="width: 50px;">#</th>
+                                        <th>Producto</th>
+                                        <th class="text-center">Órdenes</th>
+                                        <th class="text-center">Piezas</th>
+                                        <th class="text-end text-danger" style="width: 150px;">Promedio Mensual</th>
+                                        <th class="text-end pe-4" style="width: 150px;">Stock Actual</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.displayItems" t-as="item" t-key="item.id">
+                                        <td class="ps-4 text-muted small"><t t-esc="item_index + 1"/></td>
+                                        <td>
+                                            <div class="fw-bold text-dark"><t t-esc="item.name"/></div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-light text-dark border px-3 py-2">
+                                                <t t-esc="item.order_count"/>
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-esc="item.qty_sold"/>
+                                        </td>
+                                        <td class="text-end fw-bold text-danger fs-6">
+                                            <t t-esc="item.promedio_mensual"/>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <span t-attf-class="badge #{item.qty_available &lt; 0 ? 'bg-danger-soft text-danger' : 'bg-info-soft text-info'} border px-3">
+                                                <t t-esc="item.qty_available"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <t t-if="state.displayItems.length == 0">
+                            <div class="text-center p-5 text-muted">
+                                <i class="fa fa-search-minus fa-3x mb-3 text-light"/>
+                                <h5>No hay resultados para esta búsqueda</h5>
+                                <p>Prueba ajustando los filtros o el rango de fechas.</p>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

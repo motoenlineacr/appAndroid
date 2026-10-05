@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve" name="AI">
+    <t t-name="agent_ia.template">
+
+        <div class="ai-chat-container">
+
+            <!-- SIDEBAR -->
+            <aside class="ai-chat-sidebar">
+                <div class="ai-sidebar-header">
+                    <h3>Conversaciones</h3>
+                    <button class="ai-new-chat-btn" type="button">+ Nueva</button>
+                </div>
+
+                <ul class="ai-chat-list">
+                    <li class="ai-chat-item active">
+                        <span class="ai-chat-title">Conversación 1</span>
+                    </li>
+                    <li class="ai-chat-item">
+                        <span class="ai-chat-title">Conversación 2</span>
+                    </li>
+                    <li class="ai-chat-item">
+                        <span class="ai-chat-title">Conversación 3</span>
+                    </li>
+                </ul>
+            </aside>
+
+            <main class="ai-chat-main">
+
+                <header class="ai-chat-header">
+                    <h2>Agente de IA</h2>
+                </header>
+
+                <section class="ai-chat-messages">
+                    <t t-foreach="state.messages" t-as="m" t-key="m.id">
+                      <div t-attf-class="ai-message #{m.type === 'user' ? 'ai-message-user' : 'ai-message-bot'}">
+                        <div class="ai-bubble">
+                          <p><t t-esc="m.message"/></p>
+                        </div>
+                      </div>
+                    </t>
+                  </section>
+
+
+                <!-- INPUT -->
+                <footer class="ai-chat-input-area">
+                    <div class="ai-chat-input-box">
+                        <input type="text" t-ref="input_message" placeholder="Escribe tu mensaje..." class="ai-chat-input input"/>
+                        <button type="button" class="ai-send-btn" t-on-click="send_message">Enviar</button>
+                    </div>
+                </footer>
+
+            </main>
+
+        </div>
+    </t>
+</templates>
